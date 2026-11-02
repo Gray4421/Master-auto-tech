@@ -1,0 +1,8 @@
+{
+  "name": "MasterTech Auto Repair - Spartanburg, SC",
+  "description": "Spartanburg's premier RepairPal Certified and CARFAX Top-Rated automotive repair and diagnostic shop at 151 S Forest St. Honest estimates, master technicians, brakes, engine diagnostics, and maintenance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
