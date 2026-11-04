@@ -8,10 +8,22 @@ import {
   Calendar
 } from 'lucide-react';
 import { SHOP_INFO } from '../data/shopData.ts';
+import { getShopCurrentStatus } from '../utils/shopHours.ts';
 
 export const LocationAndHours: React.FC = () => {
-  const todayIndex = new Date().getDay();
-  const adjustedTodayIndex = todayIndex === 0 ? 6 : todayIndex - 1;
+  const shopStatus = getShopCurrentStatus();
+  
+  // Calculate day index based on Spartanburg weekday
+  const weekdayMap: Record<string, number> = {
+    Mon: 0,
+    Tue: 1,
+    Wed: 2,
+    Thu: 3,
+    Fri: 4,
+    Sat: 5,
+    Sun: 6,
+  };
+  const adjustedTodayIndex = weekdayMap[shopStatus.dayName] ?? 0;
 
   return (
     <section id="location" className="py-14 sm:py-16 bg-black border-b border-zinc-800">
@@ -40,7 +52,13 @@ export const LocationAndHours: React.FC = () => {
             <div className="bg-zinc-950 border border-zinc-800 rounded-xl p-4 space-y-2">
               <div className="flex items-center justify-between border-b border-zinc-800 pb-2 text-xs">
                 <span className="font-bold text-white uppercase tracking-wider text-[11px]">Shop Hours</span>
-                <span className="text-zinc-500">Eastern Time</span>
+                <div className="flex items-center gap-1.5 text-[11px]">
+                  <span className={`w-2 h-2 rounded-full ${shopStatus.isOpen ? 'bg-green-400 animate-pulse' : 'bg-amber-400'}`} />
+                  <span className={`font-bold ${shopStatus.isOpen ? 'text-green-400' : 'text-amber-400'}`}>
+                    {shopStatus.statusText}
+                  </span>
+                  <span className="text-zinc-500">· {shopStatus.detailText}</span>
+                </div>
               </div>
 
               <div className="space-y-1">

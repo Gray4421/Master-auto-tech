@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { Logo } from './Logo.tsx';
 import { SHOP_INFO } from '../data/shopData.ts';
+import { getShopCurrentStatus, ShopTimeStatus } from '../utils/shopHours.ts';
 
 interface NavbarProps {
   onOpenBooking: () => void;
@@ -19,7 +20,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isOpenNow, setIsOpenNow] = useState(false);
+  const [shopStatus, setShopStatus] = useState<ShopTimeStatus>(getShopCurrentStatus);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,31 +31,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
   }, []);
 
   useEffect(() => {
-    const checkOpenStatus = () => {
-      try {
-        const now = new Date();
-        const spartanburgTimeStr = now.toLocaleString("en-US", { timeZone: "America/New_York" });
-        const spartanburgDate = new Date(spartanburgTimeStr);
-        const day = spartanburgDate.getDay();
-        const hour = spartanburgDate.getHours();
-        const minute = spartanburgDate.getMinutes();
-        const totalMinutes = hour * 60 + minute;
-
-        // Mon-Fri: 8:00 AM (480) to 5:30 PM (1050)
-        const isWeekday = day >= 1 && day <= 5;
-        const isOpenHours = totalMinutes >= 480 && totalMinutes < 1050;
-
-        setIsOpenNow(isWeekday && isOpenHours);
-      } catch {
-        const now = new Date();
-        const day = now.getDay();
-        const hour = now.getHours();
-        setIsOpenNow(day >= 1 && day <= 5 && hour >= 8 && hour < 17);
-      }
+    const updateStatus = () => {
+      setShopStatus(getShopCurrentStatus());
     };
 
-    checkOpenStatus();
-    const interval = setInterval(checkOpenStatus, 60000);
+    updateStatus();
+    // Update every 15 seconds to ensure exact transitions at opening and closing times
+    const interval = setInterval(updateStatus, 15000);
     return () => clearInterval(interval);
   }, []);
 
@@ -76,9 +59,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
           
           {/* Status & Address */}
           <div className="flex items-center gap-1.5 sm:gap-2 truncate">
-            <span className={`w-2 h-2 rounded-full shrink-0 ${isOpenNow ? 'bg-green-400 animate-pulse' : 'bg-amber-400'}`} />
-            <span className="font-semibold text-zinc-200 shrink-0">
-              {isOpenNow ? 'Open Now' : 'Closed'}
+            <span 
+              className={`w-2 h-2 rounded-full shrink-0 ${
+                shopStatus.isOpen ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)] animate-pulse' : 'bg-amber-400'
+              }`} 
+              aria-hidden="true"
+            />
+            <span className={`font-bold shrink-0 ${shopStatus.isOpen ? 'text-green-400' : 'text-amber-400'}`}>
+              {shopStatus.statusText}
+            </span>
+            <span className="text-zinc-400 hidden xs:inline shrink-0 text-[10px] sm:text-[11px]">
+              ({shopStatus.detailText})
             </span>
             <span aria-hidden="true" className="text-zinc-700">·</span>
             <span className="truncate">151 S Forest St, Spartanburg</span>

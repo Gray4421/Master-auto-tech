@@ -3,9 +3,8 @@ import {
   Calendar, 
   Phone, 
   Star, 
-  ExternalLink,
-  CheckCircle2,
-  MapPin
+  ExternalLink, 
+  CheckCircle2 
 } from 'lucide-react';
 import { SHOP_INFO } from '../data/shopData.ts';
 
@@ -104,41 +103,12 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking }) => {
           {/* Real Photo Card (Right) */}
           <div className="lg:col-span-5 space-y-2.5">
             <div className="rounded-xl overflow-hidden border border-zinc-800 bg-zinc-950 relative shadow-xl">
-              <div className="h-56 sm:h-72 w-full overflow-hidden relative">
+              <div className="h-64 sm:h-80 w-full overflow-hidden relative">
                 <img 
                   src="/assets/aistudio/104108860_679365155964929_2286738508642534658_n_c1956adf.jpg" 
                   alt="MasterTech Technician diagnosing vehicle" 
                   className="w-full h-full object-cover object-center"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-                
-                {/* Official Logo on Black Badge */}
-                <div className="absolute top-2.5 left-2.5 bg-black/95 border border-zinc-800 px-2.5 py-1 rounded-lg flex items-center gap-2 shadow-md">
-                  <img 
-                    src="/assets/aistudio/mastertech_logo_black_bg.png" 
-                    alt="MasterTech Logo" 
-                    className="h-5 sm:h-6 w-auto object-contain block"
-                  />
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-green-400">
-                    Live Shop Bay
-                  </span>
-                </div>
-              </div>
-
-              <div className="p-3 bg-zinc-950 flex items-center justify-between text-xs">
-                <div>
-                  <span className="font-bold text-white block">MasterTech Auto Repair</span>
-                  <span className="text-zinc-500 text-[11px]">151 S Forest St · Spartanburg, SC</span>
-                </div>
-                <a
-                  href={SHOP_INFO.googleMapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-green-400 font-semibold hover:underline flex items-center gap-1 text-[11px] shrink-0"
-                >
-                  <MapPin className="w-3 h-3" />
-                  <span>Directions</span>
-                </a>
               </div>
             </div>
 
